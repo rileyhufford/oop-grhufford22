@@ -1,6 +1,6 @@
 console.log("hello");
-class Cord {
-    _constructor_(length, connector, capacity) {
+export class Cord {
+    constructor(length, connector, capacity) {
         this._length = null;
         this.length = length;
         this._connector = null;
@@ -48,8 +48,8 @@ class Cord {
     }
 }
 
-class Equipment {
-    __constructor__(consumption, connector, enabled) {
+export class Equipment {
+    constructor(consumption, connector, enabled) {
         this._consumption = consumption;
         this._connector = connector;
         this._enabled = enabled;
