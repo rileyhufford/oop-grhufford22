@@ -1,4 +1,5 @@
-import { Cord, Equipment } from "./cord.js";
+//    ./node_modules/.bin/mocha
+import { Cord, Equipment } from "./cord.mjs";
 
 const yellow = new Cord(25, "female 240 twist lock", 40);
 
@@ -12,5 +13,3 @@ const black = new Cord(25, "female 120 3-prong", 20);
 const waterThingy = new Equipment(5, "male 120 3-prong", false);
 
 //console.log(`black cord is compatiable with water thing: ${black.compatiable(waterThingy)}`);
-console.log("test");
-

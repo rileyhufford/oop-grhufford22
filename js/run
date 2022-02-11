@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t js . && docker run -v "C:/Users/Riley/oop-grhufford22/js:/app" -p 8080:8080 -t js
+docker build -t js . && docker run --rm -v "C:/Users/Riley/oop-grhufford22/js:/app" -p 8080:8080 -t js
