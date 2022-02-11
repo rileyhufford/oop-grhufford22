@@ -1,3 +1,5 @@
+//might switch to types of hats and have a second class called event
+//idea is to see if the hat is suitable for a certain event
 export class baseballhat
 {
     constructor(mainColor, type, strapType)
