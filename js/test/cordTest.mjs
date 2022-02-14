@@ -4,7 +4,6 @@
 import {Cord, Equipment} from '../cord.mjs'
 import { assert, expect, should } from 'chai';
 
-
 describe('Cord', ()=>{
   describe('length', ()=>{
     it('is the first constructor parameter ',()=>{
