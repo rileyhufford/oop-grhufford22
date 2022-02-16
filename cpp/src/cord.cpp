@@ -16,10 +16,10 @@ namespace power
     }
 
     Cord::Cord(double length, const std::string &connector, double capacity)
-        : m_length(checkedLength(length)), m_connector(connector), m_capacity(capacity) //this is the intializer and you can intialize
-                                                                         //the values you want in them
+        : m_length(checkedLength(length)), m_connector(connector), m_capacity(capacity) // this is the intializer and you can intialize
+                                                                                        // the values you want in them
     {
-        
+        //constructor
     }
     double Cord::length() const
     {
