@@ -27,7 +27,10 @@ TEST(Cord, Length) {
     ASSERT_EQ(cord.length(), length);
 
     double newLength = 22.0;
-    cord.length(newLength);
+    EXPECT_THROW({
+        cord.length(newLength);
+    }, std::out_of_range);
+    
 
     ASSERT_EQ(cord.length(), newLength);
 }

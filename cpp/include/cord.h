@@ -1,6 +1,7 @@
 #pragma once // used so that this header file is only accessed once
 
 #include <string>
+#include <memory>
 //using namespace std, not using this because std is a large library and forces other users to use it
 //this is a concern in header files as their can be library conflicts
 
@@ -19,5 +20,6 @@ namespace power
         public: void length( double value); //pretty much a setter, but literally a method
 
     };
+    typedef std::shared_ptr < Cord > SPCord;
 
 }
