@@ -1,6 +1,7 @@
 #include "cord.h"
 
 #include <stdexcept>
+#include <iostream>
 
 namespace power
 {
@@ -14,9 +15,23 @@ namespace power
             throw std::out_of_range("length must be positive");
         }
     }
-    Cord::Cord(double length, const std::string &connector, double capacity)
-        : m_length(checkedLength(length)), m_connector(connector), m_capacity(capacity)
+
+    Cord::Cord(const Cord &copy)
+    : m_constructedOn(copy.m_constructedOn), m_length(copy.m_length), 
+    m_connector(copy.m_connector), m_capacity(copy.m_capacity)
     {
+        std::cout << "Cord@" << (void*) this << " copied from" << (const void*) &copy << std::endl;
+    }
+
+    Cord::Cord(int constructedOn, double length, const std::string &connector, double capacity)
+        : m_constructedOn(constructedOn), m_length(checkedLength(length)), m_connector(connector), m_capacity(capacity)
+    {
+        std::cout << "Cord@" << (void*) this << " on line" << m_constructedOn <<"constructed." << std::endl;
+    }
+
+    Cord::~Cord()
+    {
+        std::cout << "Cord@" << (void*) this << " from line" << m_constructedOn << "destructed." << std::endl;
     }
 
     double Cord::length() const
