@@ -1,6 +1,7 @@
 //console.log("hello");
 export class Cord {
     constructor(length, connector, capacity) {
+        super(ip);
         this._length = null;
         this.length = length;
         this._connector = null;
@@ -47,6 +48,34 @@ export class Cord {
             && this.opposite == equipment.connector;
     }
 }
+
+export class Device
+{
+    constructor(ip)
+    {
+        this._ip = ip;
+    }
+    api(json, callback)
+    {
+        console.log("sent" + JSON.stringify(json) + " to " + this._ip);
+        setTimeout(()=>callback({'status': 200, 'response': json}), 100);
+    }
+}
+
+export class Fused
+{
+    constructor(fuseOk, fuseType)
+    {
+        this._fuseOk = fuseOk;
+        this._fuseType = fuseType;
+    }
+}
+
+export class FusedCord extends Cord, Fused
+{
+    
+}
+
 
 export class Equipment {
     constructor(consumption, connector, enabled) {
