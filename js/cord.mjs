@@ -62,19 +62,61 @@ export class Device
     }
 }
 
-export class Fused
+//export class Fused
+//{
+//    constructor(fuseOk, fuseType)
+//    {
+//        this._fuseOk = fuseOk;
+//        this._fuseType = fuseType;
+//    }
+//}
+
+
+
+export class Fused extends Device
 {
-    constructor(fuseOk, fuseType)
-    {
-        this._fuseOk = fuseOk;
-        this._fuseType = fuseType;
+    constructor(ip, length, connector, capacity, fuseOk, fuseType)
+        {
+            super(ip, length, connector, capacity);
+            this._fuseOk = fuseOk;
+            this._fuseType = fuseType;
+        }
+
+    //mixin
+    const Fused = {
+        get fuseOk() {
+            return this._fuseOk;
+        },
+        trip() {
+            this._fuseOk = false;
+        },
+        reset() {
+            this._fuseOk = true;
+        },
     }
 }
 
-export class FusedCord extends Cord, Fused
+export class FusedCord extends Cord
 {
-    
+    constructor(ip, length, connector, capacity, fuseOk, fuseType)
+        {
+            super(ip, length, connector, capacity);
+            this._fuseOk = fuseOk;
+            this._fuseType = fuseType;
+        }
 }
+
+Object.assign(FusedCord.prototype, Fused); //does the same as the two lines below
+//FusedCord.prototype.reset = Fused.prototype.reset;
+//FusedCord.prototype.trip = Fused.prototype.trip;
+
+let myCord = new FusedCord("127.0.0.1", 10, "male 3 prong", 20, true, "iso 3322");
+
+myCord.reset();
+
+console.log(`cord fuse ok: ${myCord.fuseOk}`);
+//myCord.print = () => { console.log("printing");}
+//myCord.print();
 
 
 export class Equipment {
