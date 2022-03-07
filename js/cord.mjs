@@ -1,6 +1,16 @@
 //console.log("hello");
-export class Cord {
-    constructor(length, connector, capacity) {
+export class Device {
+    constructor(ip) {
+        this._ip = ip;
+    }
+    api(json, callback) {
+        console.log("sent " + JSON.stringify(json) + " to " + this._ip);
+        setTimeout(()=>callback({ 'status': 200, 'response': json}), 100);
+    }
+}
+
+export class Cord extends Device{
+    constructor(ip, length, connector, capacity) {
         super(ip);
         this._length = null;
         this.length = length;
@@ -49,19 +59,6 @@ export class Cord {
     }
 }
 
-export class Device
-{
-    constructor(ip)
-    {
-        this._ip = ip;
-    }
-    api(json, callback)
-    {
-        console.log("sent" + JSON.stringify(json) + " to " + this._ip);
-        setTimeout(()=>callback({'status': 200, 'response': json}), 100);
-    }
-}
-
 //export class Fused
 //{
 //    constructor(fuseOk, fuseType)
@@ -75,24 +72,14 @@ export class Device
 
 export class Fused extends Device
 {
-    constructor(ip, length, connector, capacity, fuseOk, fuseType)
-        {
-            super(ip, length, connector, capacity);
-            this._fuseOk = fuseOk;
-            this._fuseType = fuseType;
-        }
-
-    //mixin
-    const Fused = {
-        get fuseOk() {
-            return this._fuseOk;
-        },
-        trip() {
-            this._fuseOk = false;
-        },
-        reset() {
-            this._fuseOk = true;
-        },
+    getFuseOk() {
+        return this._fuseOk;
+    }
+    trip() {
+        this._fuseOk = false;
+    }
+    reset() {
+        this._fuseOk = true;
     }
 }
 
@@ -106,7 +93,21 @@ export class FusedCord extends Cord
         }
 }
 
-Object.assign(FusedCord.prototype, Fused); //does the same as the two lines below
+//mixin
+function mixin(target, ...src) {
+    for (let mixed of src) {
+        for (var property of Object.getOwnPropertyNames(mixed.prototype)) {
+            if (property != 'constructor') {
+                target.prototype[property] = mixed.prototype[property]
+            }
+        }
+    }
+}
+
+
+mixin(FusedCord, Fused);
+
+//Object.assign(FusedCord.prototype, Fused); //does the same as the two lines below
 //FusedCord.prototype.reset = Fused.prototype.reset;
 //FusedCord.prototype.trip = Fused.prototype.trip;
 
@@ -114,7 +115,14 @@ let myCord = new FusedCord("127.0.0.1", 10, "male 3 prong", 20, true, "iso 3322"
 
 myCord.reset();
 
-console.log(`cord fuse ok: ${myCord.fuseOk}`);
+myCord.fuseOk;
+
+console.log(myCord.getFuseOk());
+
+console.log(`fused cord is fusedcord: ${myCord instanceof FusedCord}`);
+console.log(`fused cord is cord: ${myCord instanceof Cord}`);
+console.log(`fused cord is device: ${myCord instanceof Device}`);
+console.log(`fused cord is fused: ${myCord instanceof Fused}`);
 //myCord.print = () => { console.log("printing");}
 //myCord.print();
 
@@ -125,4 +133,11 @@ export class Equipment {
         this._connector = connector;
         this._enabled = enabled;
     }
+}
+
+export default {
+    Cord,
+    Fused,
+    FusedCord,
+    Equipment
 }
