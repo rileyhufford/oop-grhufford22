@@ -9,6 +9,7 @@ namespace power
 {
     class Cord
     {
+        public: Cord(const Cord &copy);
         public: const int m_constructedOn;
         //default private, while type struct is default public
         private: double m_length;
