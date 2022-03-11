@@ -34,7 +34,7 @@ export class Cord extends Device{
     set connector(value) {
         if (value.startsWith("male ") || value.startsWith("female ")) this._connector = value;
         else throw new RangeError("connector must be male or female");
-        this._connector = value;
+        //this._connector = value;
     }
 
     get capacity() { return this._capacity; }

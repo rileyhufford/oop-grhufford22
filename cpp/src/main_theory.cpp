@@ -49,6 +49,13 @@ struct CCord
     int x;
 };
 
+struct CFusedCord
+{
+    // CFusedCord_vftbl *vftbl;
+    int x;
+    bool fuseOk;
+};
+
 bool CCord_compataible(CCord *me, Equipment &equipment)
 {
     if(!equipment.plugged && me->x != 3)
@@ -71,6 +78,12 @@ struct FusedCord : Cord
         else Cord::compatiable(equipment);
     }
 };
+
+bool CFusedCord_compatiable(CFusedCord *me, Equipment &equipment)
+{
+    if(!me->fuseOk) { return false; }
+    CCord_compataible(me, equipment);
+}
 
 void CCord_destructor(CCord *me)
 {
@@ -99,9 +112,17 @@ void foo()
     CCord *cCord = CCordConstructor(3);
 
     Equipment *equipment = new Equipment();
-    cout << cppCord->compatiable(*equipment) << endl;
-    cout << ((FusedCord*)cppFusedCord)->compatiable(*equipment) << endl;
-    cout << ((Cord*)cppFusedCord)->compatiable(*equipment) << endl;
+    //cout << cppCord->compatiable(*equipment) << endl;
+    //cout << dynamic_cast<Cord*>(cppFusedCord)->compatiable(*equipment) << endl;
+    cout << dynamic_cast<Cord*>(cppFusedCord)->compatiable(*equipment) << endl;
 
     cout << cCord->vftbl->compatiable(cCord, *equipment) << endl;
+
+    cout << CCord_compatiable(cCord, *equipment) << endl;
+}
+
+int main()
+{
+    foo();
+    return 0;
 }
