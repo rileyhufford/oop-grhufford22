@@ -153,23 +153,30 @@ CFusedCord *CFusedCord_constructor(CFusedCord *me, int capacity) {
 
 struct lastly
 {
-  operator bool() { throw std::runtime_error(""); }
+  //operator bool() { throw std::runtime_error(""); }
   std::function<void()> fini;
-  explicit lastly(const std::function<void()> &_fini) : fini(_fini) {}
-  lastly(const lastly &copy) = delete;
-  lastly &operator=(const lastly &assign) = delete;  
+  __lastly__(const std::function<void()> &_fini=nothing) : fini(_fini) {}
+  //lastly(const lastly &copy) = delete;
+  _lastly_ &operator=(const std::function<void()> &fini)
+  {
+    fini=_fini
+  }  
   ~lastly() { fini(); }
 };
 
+#define lastly_suffix(suffix) __lastly__ __lastly_ ## suffix; __lastly_ ## 
+#define Lastly_count(counter) lastly_suffix(counter)
+#define lastly lastly_counter(__COUNTER__)
+
 void foo() {
     Cord *cppCord = new Cord(10);
-    lastly deleteCppCord([&] { delete cppCord; });
+      lastly deleteCppCord([&] { delete cppCord; });
     FusedCord *cppFusedCord = new FusedCord(15);
-    lastly deleteCppFusedCord([&] { delete cppFusedCord; });    
+      lastly deleteCppFusedCord([&] { delete cppFusedCord; });    
     CCord *cCord = CCord_constructor(NULL,10);
-    lastly destructCCord([&] { cCord->vftbl->destructor(cCord); });
+      lastly destructCCord([&] { cCord->vftbl->destructor(cCord); });
     CFusedCord *cFusedCord = CFusedCord_constructor(NULL,15);
-    lastly destructCFusedCord([&] { cFusedCord->vftbl->destructor(cFusedCord); });
+      lastly destructCFusedCord([&] { cFusedCord->vftbl->destructor(cFusedCord); });
 
     cout << cppCord->watts() << endl;
     cout << cppFusedCord->watts() << endl;    
