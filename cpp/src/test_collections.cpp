@@ -125,7 +125,24 @@ TEST(vector,heirarchy) {
   // Reference is a const pointer to something (not null).
   //    since you can't change the pointer, and it can't be null,
   //    saying *ref is redundant, so, just ref means *ref
+  //    
+  //        int &r = y; <--> int * const _r = &y;
+  //        r = 3;      <-->  *_ref = 3;
+  //        
   // safely cast the Cord& in the vector to FusedCord& to access the fuse...
+
+  // cords - vec<shared_ptr<Cord>>
+  // cords[1] - shared_ptr<Cord>
+  //    Cord operator*() { return Cord(owned); }
+  // *cords[1] -- Cord& // actualy is FusedCord&
+  // dynamic_cast<FusedCord&> --upcast from Cord& to FusedCord&
+  //    This cast is rune-time checked. If you tried to upcast,
+  //    and the thing wasn't FusedCord& - exception
+  //   So that (ref).fuseOk = false is modifying some FusedCord.
+  //
+  //
+  // cords[1].fuseOk = false; // js version - no types
+
   dynamic_cast<FusedCord&>(*cords[1]).fuseOk = false;
 
   for (auto &cord1 : cords) {
