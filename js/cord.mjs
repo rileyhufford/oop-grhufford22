@@ -12,6 +12,17 @@ export class Device {
         this._notifying = false;
     }
 
+    _removeObserver(observer)
+    {
+        for(let i = 0; i<this._observers.length; ++i)
+        {
+            if (this._observers[i] === observer)
+            {
+                this._observers.splice(i,1);
+            }
+        }
+    }
+
 
     removeObserver(observer)
     {
@@ -26,6 +37,12 @@ export class Device {
         }
     }
 
+    _addObserver(observer)
+    {
+        this._removeObserver(observer);
+        this._observers.push(observer);
+    }
+
     addObserver(observer)
     {
         if (this._notifying){
@@ -38,16 +55,12 @@ export class Device {
 
     _notify(bulletin) {
         this._notifying = true;
-        for (let i=0; i<this._observers.length; ++i)
-        {
-            this._observers[i].deviceNotification(this, bulletin);
-        }
-        this._notifying = false;
-        while (this._postponements.length > 0)
-        {
-            let postponements = this._postponements;
+        this._observers.forEach((observer)=> observer.deviceNotification(this, bulletin));
+        for(;;) {
+            const postponements = this._postponements;
+            if (postponements.length() == 0) break;
             this._postponements = new Array();
-            postponements.forEach((postponement) => { postponement(); });
+            postponements.forEach((postponements) => {postponement();});
         }
         this._notifying = false;
     }
@@ -68,7 +81,7 @@ export class Cord extends Device{
         this.connector = connector;
         this._capacity = null;
         this.capacity = capacity; //this.set capacity
-
+        this._powersDevice = null;
     }
 
     //getters and setters ----------
@@ -107,6 +120,26 @@ export class Cord extends Device{
         return this.capacity >= equipment.consumption
             && this.opposite == equipment.connector;
     }
+
+    unplug()
+    {
+        if (this._powersDevice != null)
+        {
+            this._notify({'action':'unplug', 'target': this._powersDevice});
+            this._powersDevice = null;
+        }
+    }
+
+    power(device)
+    {
+        if(this._powersDevice != device)
+        {
+            this.unplug();
+            this._notify({'action':'will-power', 'target':device});
+            this._powersDevice = device;
+            this._notify({'action':'power', 'target':device});
+        }
+    }
 }
 
 //export class Fused
@@ -125,11 +158,20 @@ export class Fused extends Device
     getFuseOk() {
         return this._fuseOk;
     }
+    setFuseOk(value)
+    {
+        if (value != this._fuseOk)
+        {
+            this._notify({'action':'will-set-fuse-ok', 'target':value});
+            this._powersDevice = device;
+            this._notify({'action':'set-fuse-ok', 'target':device});
+        }
+    }
     trip() {
-        this._fuseOk = false;
+        this._setFuseOk(false);
     }
     reset() {
-        this._fuseOk = true;
+        this._setFuseOk(true);
     }
 }
 
@@ -140,6 +182,27 @@ export class FusedCord extends Cord
             super(ip, length, connector, capacity);
             this._fuseOk = fuseOk;
             this._fuseType = fuseType;
+            this.addObserver(this);
+        }
+
+        deviceNotification(device, bulletin)
+        {
+            if (this._powersDevice != null && device === this &&
+                 bulletin['action'] == 'will-set-fuse-ok' &&
+                 bulletin['target'] == false)
+             {
+                 this._wasPluggedTo = this._powersDevice;
+                 this.unplug();
+             }
+
+             if (this._wasPluggedTo != null && device === this &&
+                bulletin['action'] == 'will-set-fuse-ok' &&
+                bulletin['target'] == true)
+            {
+                this.power(this._wasPluggedTo)
+                this._wasPluggedTo = this._powersDevice;
+                this.unplug();
+            }
         }
 }
 
