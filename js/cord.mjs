@@ -4,12 +4,35 @@ export class DeviceObserver{
     deviceNotification(device, bulletin) {}
 }
 
-export class Device {
+export class Logger extends DeviceObserver
+{
+    constructor()
+    {
+        super();
+        this._deviceNotifications = new Array();
+    }
+    deviceNotifications(device, bulletin)
+    {
+        this._deviceNotifications.push({'device':device, 'bulletin': bulletin});
+        console.log("log "+ device + ": " + JSON.stringify(bulletin));
+    }
+}
+
+export const logger = new Logger();
+
+export class Device extends DeviceObserver {
     constructor(ip) {
+        super();
         this._ip = ip;
         this._observers = new Array();
         this._postponements = new Array();
         this._notifying = false;
+        this.addObserver(logger);
+    }
+
+    toString()
+    {
+        return `$(this._ip)`
     }
 
     _removeObserver(observer)
@@ -58,7 +81,7 @@ export class Device {
         this._observers.forEach((observer)=> observer.deviceNotification(this, bulletin));
         for(;;) {
             const postponements = this._postponements;
-            if (postponements.length() == 0) break;
+            if (postponements.length == 0) break;
             this._postponements = new Array();
             postponements.forEach((postponements) => {postponement();});
         }
@@ -241,10 +264,15 @@ console.log(`fused cord is fused: ${myCord instanceof Fused}`);
 
 
 export class Equipment {
-    constructor(consumption, connector, enabled) {
+    constructor(ip, consumption, connector, enabled) {
+        super(ip);
         this._consumption = consumption;
         this._connector = connector;
         this._enabled = enabled;
+    }
+    deviceNotification(device, bulletin)
+    {
+        console.log("got notification from" + device + ": " + JSON.stringify(bulletin));
     }
 }
 
