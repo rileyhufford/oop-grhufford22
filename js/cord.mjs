@@ -1,5 +1,24 @@
 //console.log("hello");
 
+export class DeviceFactory
+{
+    /* Device */ build(/* json */ what);
+}
+
+class DB {
+    constructor()
+    {
+        this._connected = null;
+    }
+    /* DB */ connect() {
+        if (this._connected) return this._connected;
+        //...
+    }
+}
+
+export const db = new DB();
+db.connect();
+
 export class DeviceObserver{
     deviceNotification(device, bulletin) {}
 }
@@ -14,7 +33,7 @@ export class Logger extends DeviceObserver
     deviceNotifications(device, bulletin)
     {
         this._deviceNotifications.push({'device':device, 'bulletin': bulletin});
-        console.log("log "+ device + ": " + JSON.stringify(bulletin));
+        console.log("log ", device, "bulletin", bulletin);
     }
 }
 
@@ -50,13 +69,12 @@ export class Device extends DeviceObserver {
     removeObserver(observer)
     {
         if (this._notifying){
+            const me = this;
             this._postponements.push(() => {this.removeObserver(observer);});
             return; 
         }
-        for (let i=0; i< this._observers.length; ++i) {
-            if(this._observers[i] === observer) {
-                this._observers.splice(i,1);
-            }
+        else{
+            this._removeObserver(observer);
         }
     }
 
@@ -69,11 +87,12 @@ export class Device extends DeviceObserver {
     addObserver(observer)
     {
         if (this._notifying){
-            this._postponements.push(() => {this.removeObserver(observer);});
-            return; 
+            const me = this;
+            this._postponements.push(() => {this.removeObserver(observer);})
         }
-        this.removeObserver(observer);
-        this._observers.push(observer);
+        else{
+            this._addObserver(observer);
+        }
     }
 
     _notify(bulletin) {
