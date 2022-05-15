@@ -1,10 +1,10 @@
 import { volleyball } from "./volleyball.mjs";
 
-const myVolleyball = new volleyball("blue", false, true);
+const myVolleyball = new volleyball("green", false, true);
 
 console.assert(myVolleyball.color == "green", "Color failed");
 console.assert(myVolleyball.professional == false, "Professional failed");
-console.assert(myVolleyball.inflated == true, "Professional failed");
+console.assert(myVolleyball.inflated == false, "Professional failed");
 /*
 //console.log(myVolleyball);
 try { 
