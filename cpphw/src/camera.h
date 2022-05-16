@@ -1,29 +1,34 @@
 #pragma once
 
 #include <string>
+#include <stdexcept>
 
-namespace std
-{
+using namespace std;
+
     class Camera
     {
         private:
             string m_mount;
-            int m_focalLength;
+            int m_CfocalLength;
 
-        static int checkFocalLength(int focalLength)
+        static int checkFocalLength(int CfocalLength)
         {
-            if(focalLength > 0) return focalLength;
-            else throw out_of_range("focal length cannot be zero or less!");
+            if(CfocalLength > 0) return CfocalLength;
+            else 
+            {
+                throw out_of_range("focal length cannot be zero or less!");
+            }
         }
 
         public:
-            Camera(string mount, int focalLength)
-                : m_mount(mount), m_focalLength(checkFocalLength(focalLength))
+            Camera(string mount, int CfocalLength)
+                : m_mount(mount), m_CfocalLength(checkFocalLength(CfocalLength))
             {}
             Camera(string mount)
                 : m_mount(mount)
             {}
-            ~Camera(); //destructor
+            ~Camera() = default; //destructor
+            
         
 
 
@@ -35,12 +40,11 @@ namespace std
             }
             int CfocalLength() const
             {
-                return m_focalLength;
+                return m_CfocalLength;
             }
             //setters
-            void focalLength(const int &value)
+            void CfocalLength(const int &value)
             {
-                m_focalLength = checkFocalLength(value);
+                m_CfocalLength = checkFocalLength(value);
             }
     };
-}

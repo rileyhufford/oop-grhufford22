@@ -2,11 +2,10 @@
 #include <iomanip>
 #include <string>
 #include <iostream>
-
 #include "camera.h"
 
-namespace std
-{
+using namespace std;
+
     struct Lens;
     struct Body;
 
@@ -14,11 +13,11 @@ namespace std
     {
         string m_mountType;
         int m_LfocalLength;
-        Lens(string _mountType, int _focalLength) : m_mountType(_mountType), m_LfocalLength(_focalLength) {}
-        Lens(int _focalLength) : m_LfocalLength(_focalLength) {}
+        Lens(string _mountType, int _LfocalLength) : m_mountType(_mountType), m_LfocalLength(_LfocalLength) {}
+        Lens(int _LfocalLength) : m_LfocalLength(_LfocalLength) {}
 
         string mountType() const {return m_mountType;}
-        int focalLength() const {return m_LfocalLength;}
+        int LfocalLength() const {return m_LfocalLength;}
     };
 
     struct Body : Camera, Lens
@@ -31,7 +30,7 @@ namespace std
     };
 
     //destructor
-    Camera::~Camera() = default;
+    ///Camera::~Camera() = default;
 
 
 
@@ -42,8 +41,8 @@ namespace std
         Body *cppBody = new Body("ef", 50, false);
 
         cout << "Camera: mount: " << cppCamera->mount() << ", focal length: " << cppCamera->CfocalLength() << endl;
-        cout << "Lens: mount: " << cppLens->mountType() << ", focal length: " << cppLens->focalLength() << endl;
-        cout << "Lens: mount: " << cppBody->mount() << ", focal length: " << cppBody->CfocalLength() << 
+        cout << "Lens: mount: " << cppLens->mountType() << ", focal length: " << cppLens->LfocalLength() << endl;
+        cout << "Body: mount: " << cppBody->mount() << ", focal length: " << cppBody->CfocalLength() << 
         ", mirorrless?: " << cppBody->mirrorless() << endl;
 
         delete cppCamera;
@@ -51,9 +50,9 @@ namespace std
         delete cppBody;
     }
 
-    int main()
-    {
-        foo();
-        return 0;
-    }
+
+int main()
+{
+    foo();
+    return 0;
 }
