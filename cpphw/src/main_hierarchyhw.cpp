@@ -29,11 +29,6 @@ using namespace std;
         bool mirrorless() const {return m_mirrorless;}
     };
 
-    //destructor
-    ///Camera::~Camera() = default;
-
-
-
     void foo()
     {
         Camera *cppCamera = new Camera("ef", 50);
