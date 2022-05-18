@@ -77,9 +77,15 @@ struct DSLR : Body, Lens, virtual Camera
 void foo()
 {
     bool lenspowered = true;
+    char multicamlabel = 'a';
+
     DSLR dslr("Canon");
     ConnectedLens connectedlens(lenspowered);
+
     dslr.lensAttached(connectedlens);
+    dslr.multicamLabel(multicamlabel);
+
+    cout << endl << "multicamLabel test(should be 'a'): " << dslr.multicamLabel() << endl << endl;
 }
 
 int main()
