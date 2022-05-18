@@ -1,4 +1,6 @@
+from telnetlib import BM
 import time 
+import finalTest as test
 
 class Camera():
     def __init__(self, brand, mount, price):
@@ -70,7 +72,7 @@ def bodyInvAdd(brand, mount):
     if(isinstance(brand, str) and isinstance(mount, str)):
         bodyInv.update({brand: mount})
     else:
-        raise Exception("Brand and mount msy be a string!")
+        raise Exception("Brand and mount must be a string!")
 
 
 #default inventory filling:
@@ -123,7 +125,7 @@ def usrAddLens():
     while True:
         usr = input()
         if(usr == "y"):
-            main()
+            startUser()
         elif(usr == "n"):
             break
         else:
@@ -148,19 +150,31 @@ def usrAddBody():
     while True:
         usr = input()
         if(usr == "y"):
-            main()
+            startUser()
         elif(usr == "n"):
             break
         else:
             print("Enter 'y' for yes and 'n' for no")
 
+#tests function
+def tests():
+    brand = "canon"
+    mount = "ef-s"
+    price = 119.24
+    name = "90d"
+    focalLength = 50
 
-def main():
-    #default inventory fill
-    lensInvFill()
-    bodyInvFill()
+    lens = Lens("sony", "e-mount", 1213.2, 200)
+    body = Body("sony", "e-mount", 332.4, "a7")
 
-    #user input
+    print("\nTest cases:")
+    test.test_Camera(brand, mount, price)
+    test.test_Lens(brand, mount, price, focalLength)
+    test.test_Body(brand, mount, price, name)
+    test.test_compatiable(lens, body)
+    print("\n")
+
+def startUser():
     while True:
         print("Welcome to Riley's camera store inventory manager!")
         print("‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n")
@@ -187,7 +201,7 @@ def main():
                 usr2 = input()
 
                 if(usr2 == "y"):
-                    main()
+                    startUser()
                 elif(usr2 == "n"):
                     break
                 else:
@@ -201,7 +215,7 @@ def main():
             usr2 = input()
 
             if(usr2 == "y"):
-                main()
+                startUser()
             elif(usr2 == "n"):
                 break
             else:
@@ -209,6 +223,19 @@ def main():
         else:
             print("Please enter one of the following choices:\n")
             time.sleep(2)
+
+
+def main():
+    #test cases:
+    tests()
+
+    #default inventory fill
+    lensInvFill()
+    bodyInvFill()
+
+    #user input
+    startUser()
+    
         
 
 if __name__ == "__main__":

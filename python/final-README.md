@@ -10,7 +10,7 @@ The lensInvFill and bodyInvFill are both functions used to add default objects t
 
 The compatiableSort function is used sort between the two inventories and print out which body and lens combo would be possible with the current inventory. This is done using the compatiable function previously mentioned.
 
-Main contains the start of user input and can be looped back to from other functions that use user input.
+Main contains the start of user input called startUser() and can be looped back to from other functions that use user input. Main also includes the tests functions which uses the file finalTest.py to create test cases on final.py's objects.
 
 ## User guide
 
